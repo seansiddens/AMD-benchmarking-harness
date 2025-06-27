@@ -1,5 +1,6 @@
 import torch
 import tk_kernel
+print(tk_kernel.__file__)
 import random
 import time
 
@@ -34,7 +35,7 @@ if profiling:
     base_dir = os.path.dirname(os.path.realpath(__file__))
 
     # Set destination directory
-    dirpath = "/shared/amdgpu/home/tech_ops_amd_xqh/simran/data_logs"
+    dirpath = "/scratch/users/ssiddens/data_logs/"
     timestamp = time.strftime("%m%d_%H%M")
     new_dir = os.path.join(dirpath, f"{timestamp}_outputs")
     os.makedirs(new_dir, exist_ok=True)

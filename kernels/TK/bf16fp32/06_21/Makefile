@@ -2,7 +2,7 @@
 GPU_TARGET=CDNA3
 
 TARGET=tk_kernel
-SRC=kernel.cpp
+SRC=kernel_v7.cpp
 
 # HIP variables
 ROCM_INSTALL_DIR := $(ROCM_PATH)
@@ -38,7 +38,7 @@ ICXXFLAGS+= -I${THUNDERKITTENS_ROOT}/include -I${THUNDERKITTENS_ROOT}/prototype 
 # Default target
 all: $(TARGET)
 
-LOGDIR := /shared/amdgpu/home/tech_ops_amd_xqh/simran/data_logs/$(shell date +%m%d_%H%M)_outputs
+LOGDIR := /scratch/users/ssiddens/data_logs/$(shell date +%m%d_%H%M)_outputs
 LOGFILE := $(LOGDIR)/make_build.log
 
 $(TARGET): $(SRC)
