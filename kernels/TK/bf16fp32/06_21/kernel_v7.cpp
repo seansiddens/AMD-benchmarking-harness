@@ -53,9 +53,21 @@ void micro_tk(const micro_globals g) {
 
     // const int row = blockIdx.y;
     // const int col = blockIdx.x;
+    // 2x2 L2 tiles
+    // grid is 128 * 128 L2 tiles (128 * 2 = 256. 256 * 32 WGs in x dim = 8192)
+    // contiguous remapping:
+    // M = total XCDs 
+    // N = total WGS
+    // new_id = (id % M) * (N // M) + (i // M)
+    // 
+
     int wgid = blockIdx.y * gridDim.x + blockIdx.x;
-    const int row = wgid / gridDim.x;
-    const int col = wgid % gridDim.x;
+    // int wgs_per_xcd = (gridDim.x * gridDim.y) / 8; // This should be 128, is this fine?
+    // int xcd = wgid % 8; // WGs are assigned to XCDs via round-robin.
+    // int local_wgid = wgid / 8;
+    int new_wgid = (wgid % 8) * 128 + (wgid / 8);
+    const int row = new_wgid / gridDim.x;
+    const int col = new_wgid % gridDim.x;
 
     const int warp_id = kittens::warpid();
     const int warp_row = warp_id / 4;
