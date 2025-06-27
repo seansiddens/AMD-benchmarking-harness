@@ -1,6 +1,7 @@
 #include "kittens.cuh"
 #include "pyutils/pyutils.cuh"
 #include "utils.cpp"
+#include <iostream>
 using namespace kittens;
 
 constexpr int BLOCK_SIZE       = 256;  
@@ -32,6 +33,7 @@ struct micro_globals {
     size_t dynamic_shared_memory() { return 65536; }
 };
 
+// maxThreadsPerBlock = 512, minBlocksPerCu? = 1
 __global__ __launch_bounds__(NUM_THREADS, 1)
 void micro_tk(const micro_globals g) {
     extern __shared__ alignment_dummy __shm[];
@@ -49,8 +51,11 @@ void micro_tk(const micro_globals g) {
     float4 a_buffer_next[BUFFER_SIZE];
     float4 b_buffer_next[BUFFER_SIZE];
 
-    const int row = blockIdx.y;
-    const int col = blockIdx.x;
+    // const int row = blockIdx.y;
+    // const int col = blockIdx.x;
+    int wgid = blockIdx.y * gridDim.x + blockIdx.x;
+    const int row = wgid / gridDim.x;
+    const int col = wgid % gridDim.x;
 
     const int warp_id = kittens::warpid();
     const int warp_row = warp_id / 4;
